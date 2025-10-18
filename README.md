@@ -1,10 +1,10 @@
-# 🎨 Consistency Distillation для Diffusion Models
+# Consistency Distillation для Diffusion Models
 
-## 🚀 Что это?
+## Что это?
 
 Этот репозиторий содержит реализацию **Consistency Distillation** - современного метода для обучения diffusion моделей, который позволяет:
 
-## 📁 Структура проекта
+## Структура проекта
 
 ```
 ├── src/
@@ -21,7 +21,7 @@
 └── tests/                 # Тесты
 ```
 
-## 🎯 Основные веса моделей
+## Основные веса моделей
 
 | Веса модели | Размер | Описание | Скрипт |
 |-------------|--------|----------|--------|
@@ -31,9 +31,9 @@
 | `student_test_cd_100_iters.pt` | 4.4GB | Веса тестовой модели на 100 итераций | `train_cd_100_iters.py` |
 | `student_consistency_20iters.pt` | 828MB | Веса тестовой на 20 итераций | `test_new_consistency_20_iters.py` |
 
-> **📥 Скачать веса**: См. [MODELS_DOWNLOAD.md](MODELS_DOWNLOAD.md) для ссылок на Google Drive
+> **Скачать веса**: См. [MODELS_DOWNLOAD.md](MODELS_DOWNLOAD.md) для ссылок на Google Drive
 
-## 🛠️ Быстрый старт
+## Быстрый старт
 
 ### 1. Установка зависимостей
 
@@ -64,23 +64,23 @@ python examples/consistency_distillation_demo.py
 python examples/methods_comparison.py
 ```
 
-## 📥 Скачать обученные веса
+## Скачать обученные веса
 
 > **Важно**: Веса моделей не включены в репозиторий из-за размера (28GB)
 
-### 🎯 Основные веса (Google Drive #1):
+### Основные веса (Google Drive #1):
 - **student_test_cd_fixed_text_encoder.pt** (768MB) - [Google Drive #1](https://drive.google.com/drive/folders/1UIpo6Ac-UimM03qLn6Ty6g4D56GRo21d?usp=sharing)
 - **student_final_5epochs_lr1e5.pt** (4.4GB) - [Google Drive #1](https://drive.google.com/drive/folders/1UIpo6Ac-UimM03qLn6Ty6g4D56GRo21d?usp=sharing)  
 - **student_final_hybrid.pt** (4.4GB) - [Google Drive #1](https://drive.google.com/drive/folders/1UIpo6Ac-UimM03qLn6Ty6g4D56GRo21d?usp=sharing)
 - **student_test_cd_100_iters.pt** (4.4GB) - [Google Drive #1](https://drive.google.com/drive/folders/1UIpo6Ac-UimM03qLn6Ty6g4D56GRo21d?usp=sharing)
 
-### 🔧 Дополнительные веса (Google Drive #2):
+### Дополнительные веса (Google Drive #2):
 - **student_test_cd_final.pt** (4.4GB) - [Google Drive #2](https://drive.google.com/drive/folders/14Frua7p6ZejptuRrXo_O9dEFwIYtdi0t?usp=sharing)
 - **student_test_cd_fixed_teacher.pt** (4.4GB) - [Google Drive #2](https://drive.google.com/drive/folders/14Frua7p6ZejptuRrXo_O9dEFwIYtdi0t?usp=sharing)
 - **student_test_cd_pretrained_teacher.pt** (4.4GB) - [Google Drive #2](https://drive.google.com/drive/folders/14Frua7p6ZejptuRrXo_O9dEFwIYtdi0t?usp=sharing)
 - **student_consistency_20iters.pt** (828MB) - [Google Drive #2](https://drive.google.com/drive/folders/14Frua7p6ZejptuRrXo_O9dEFwIYtdi0t?usp=sharing)
 
-### 🚀 Быстрый старт с весами:
+### Быстрый старт с весами:
 1. Скачайте нужные веса
 2. Поместите в `assets/checkpoints/`
 3. Запустите скрипт:
@@ -88,7 +88,7 @@ python examples/methods_comparison.py
 python src/training/train_cd_fixed_text_encoder.py
 ```
 
-## 📊 Архитектуры моделей
+## Архитектуры моделей
 
 ### Student Models
 - **MicroDiT_Tiny_2** - Компактная архитектура для быстрого обучения
@@ -100,7 +100,7 @@ python src/training/train_cd_fixed_text_encoder.py
 - **create_latent_diffusion** - Основной учитель для большинства экспериментов
 - **SDXL Turbo** - Для специализированных задач
 
-## ⚙️ Конфигурации
+## Конфигурации
 
 | Параметр | Значения | Описание |
 |----------|----------|----------|
@@ -109,7 +109,7 @@ python src/training/train_cd_fixed_text_encoder.py
 | **Epochs** | 1-5 | От быстрого теста до полного обучения |
 | **Iterations** | 20-4000 | Гибкая настройка длительности |
 
-## 🎨 Примеры использования
+## Примеры использования
 
 ### Базовое обучение
 ```python
