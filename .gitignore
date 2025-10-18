@@ -143,3 +143,6 @@ docs/_build/
 
 # Pyre type checker
 .pyre/
+weights_compressed.tar.gz
+*.tar.gz
+assets/checkpoints/*.pt
