@@ -68,4 +68,7 @@ ls -la assets/checkpoints/
 # Используйте CPU версию
 python src/training/train_cd_cpu_offload.py
 ```
+<<<<<<< HEAD
 
+=======
+>>>>>>> abf3bb9c06f44bb55cd857268e37e5bd7ccd3cb1
