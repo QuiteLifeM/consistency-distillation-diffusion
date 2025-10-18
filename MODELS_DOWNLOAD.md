@@ -67,9 +67,3 @@ ls -la assets/checkpoints/
 # Используйте CPU версию
 python src/training/train_cd_cpu_offload.py
 ```
-
-## 📞 Поддержка
-
-Если ссылки не работают или есть вопросы:
-- Создайте [Issue](https://github.com/QuiteLifeM/consistency-distillation-diffusion/issues)
-- Напишите на email: consistency@example.com
