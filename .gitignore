@@ -146,3 +146,6 @@ docs/_build/
 weights_compressed.tar.gz
 *.tar.gz
 assets/checkpoints/*.pt
+assets/checkpoints/
+datadir/latents/
+consistency-distillation-weights.*
