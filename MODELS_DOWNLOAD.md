@@ -6,19 +6,20 @@
 
 | Веса модели | Размер | Описание | Ссылка |
 |-------------|--------|----------|--------|
-| `student_test_cd_fixed_text_encoder.pt` | 1.2GB | **Главные веса** (последние обученные) | [Google Drive](https://drive.google.com/drive/folders/1UIpo6Ac-UimM03qLn6Ty6g4D56GRo21d?usp=sharing) |
-| `student_final_5epochs_lr1e5.pt` | 1.2GB | Веса полного обучения 5 эпох с LR 1e-5 | [Google Drive](https://drive.google.com/drive/folders/1UIpo6Ac-UimM03qLn6Ty6g4D56GRo21d?usp=sharing) |
-| `student_final_hybrid.pt` | 1.2GB | Веса гибридной модели | [Google Drive](https://drive.google.com/drive/folders/1UIpo6Ac-UimM03qLn6Ty6g4D56GRo21d?usp=sharing) |
-| `student_test_cd_100_iters.pt` | 1.2GB | Веса тестовой модели на 100 итераций | [Google Drive](https://drive.google.com/drive/folders/1UIpo6Ac-UimM03qLn6Ty6g4D56GRo21d?usp=sharing) |
-| `student_test_cd_final.pt` | 1.2GB | Веса финальной тестовой модели | [Google Drive](https://drive.google.com/drive/folders/1UIpo6Ac-UimM03qLn6Ty6g4D56GRo21d?usp=sharing) |
-| `student_test_cd_fixed_teacher.pt` | 1.2GB | Веса с исправленным учителем | [Google Drive](https://drive.google.com/drive/folders/1UIpo6Ac-UimM03qLn6Ty6g4D56GRo21d?usp=sharing) |
-| `student_test_cd_pretrained_teacher.pt` | 1.2GB | Веса с предобученным учителем | [Google Drive](https://drive.google.com/drive/folders/1UIpo6Ac-UimM03qLn6Ty6g4D56GRo21d?usp=sharing) |
-| `student_consistency_20iters.pt` | 1.2GB | Веса тестовой на 20 итераций | [Google Drive](https://drive.google.com/drive/folders/1UIpo6Ac-UimM03qLn6Ty6g4D56GRo21d?usp=sharing) |
+| `student_test_cd_fixed_text_encoder.pt` | 768MB | **Главные веса** (последние обученные) | [Google Drive](https://drive.google.com/drive/u/2/folders/1UIpo6Ac-UimM03qLn6Ty6g4D56GRo21d) |
+| `student_final_5epochs_lr1e5.pt` | 4.4GB | Веса полного обучения 5 эпох с LR 1e-5 | [Google Drive](https://drive.google.com/drive/u/3/folders/14Frua7p6ZejptuRrXo_O9dEFwIYtdi0t) |
+| `student_final_hybrid.pt` | 4.4GB | Веса гибридной модели | [Google Drive](https://drive.google.com/drive/u/3/folders/14Frua7p6ZejptuRrXo_O9dEFwIYtdi0t) |
+| `student_test_cd_100_iters.pt` | 4.4GB | Веса тестовой модели на 100 итераций | [Google Drive](https://drive.google.com/drive/u/3/folders/14Frua7p6ZejptuRrXo_O9dEFwIYtdi0t) |
+| `student_test_cd_final.pt` | 4.4GB | Веса финальной тестовой модели | [Google Drive](https://drive.google.com/drive/u/2/folders/1UIpo6Ac-UimM03qLn6Ty6g4D56GRo21d) |
+| `student_test_cd_fixed_teacher.pt` | 4.4GB | Веса с исправленным учителем | [Google Drive](https://drive.google.com/drive/u/2/folders/1UIpo6Ac-UimM03qLn6Ty6g4D56GRo21d) |
+| `student_test_cd_pretrained_teacher.pt` | 4.4GB | Веса с предобученным учителем | [Google Drive](https://drive.google.com/drive/u/2/folders/1UIpo6Ac-UimM03qLn6Ty6g4D56GRo21d) |
+| `student_consistency_20iters.pt` | 828MB | Веса тестовой на 20 итераций | [Google Drive](https://drive.google.com/drive/u/3/folders/14Frua7p6ZejptuRrXo_O9dEFwIYtdi0t) |
 
 ## 📦 Все веса (28GB)
 
-**Полный архив**: 
-- [Google Drive - Все веса](https://drive.google.com/drive/folders/1UIpo6Ac-UimM03qLn6Ty6g4D56GRo21d?usp=sharing)
+**Полные архивы**: 
+- [Google Drive - Папка 1](https://drive.google.com/drive/u/2/folders/1UIpo6Ac-UimM03qLn6Ty6g4D56GRo21d) (4 файла)
+- [Google Drive - Папка 2](https://drive.google.com/drive/u/3/folders/14Frua7p6ZejptuRrXo_O9dEFwIYtdi0t) (4 файла)
 
 ## 🚀 Быстрый старт
 
@@ -68,8 +69,3 @@ ls -la assets/checkpoints/
 python src/training/train_cd_cpu_offload.py
 ```
 
-## 📞 Поддержка
-
-Если ссылки не работают или есть вопросы:
-- Создайте [Issue](https://github.com/QuiteLifeM/consistency-distillation-diffusion/issues)
-- Напишите на email: consistency@example.com
