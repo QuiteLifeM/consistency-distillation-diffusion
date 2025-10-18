@@ -1,7 +1,7 @@
 📚 ИНДЕКС СКРИПТОВ ОБУЧЕНИЯ
 ============================
 
-🎯 ОСНОВНЫЕ СКРИПТЫ:
+ ОСНОВНЫЕ СКРИПТЫ:
 
 1. train_cd_fixed_text_encoder.py 
    → student_test_cd_fixed_text_encoder.pt
@@ -13,7 +13,7 @@
    → student_final_5epochs_lr1e5.pt
    → Обучение с пониженным learning rate
 
-📊 ЭКСПЕРИМЕНТАЛЬНЫЕ СКРИПТЫ:
+ ЭКСПЕРИМЕНТАЛЬНЫЕ СКРИПТЫ:
 
 4. train_hybrid_consistency.py
    → student_final_hybrid.pt
@@ -35,7 +35,7 @@
    → student_test_cd_final.pt
    → С правильной обработкой текста
 
-🧪 ТЕСТОВЫЕ СКРИПТЫ:
+ ТЕСТОВЫЕ СКРИПТЫ:
 
 9. test_new_consistency_20_iters.py
    → student_consistency_20iters.pt
@@ -53,14 +53,14 @@ student_test_cd_pretrained_teacher.pt    → train_cd_with_pretrained_teacher.py
 student_test_cd_final.pt                 → train_proper_cd_with_text.py
 student_consistency_20iters.pt           → test_new_consistency_20_iters.py
 
-🎯 РЕКОМЕНДАЦИИ:
+ РЕКОМЕНДАЦИИ:
 
 1. Для демонстрации: используйте train_cd_fixed_text_encoder.py
 2. Для полного обучения: train_5_epochs_cd.py
 3. Для экспериментов: остальные скрипты
 4. Для быстрого теста: test_new_consistency_20_iters.py
 
-📁 СТРУКТУРА:
+ СТРУКТУРА:
 - Все скрипты в: src/training/
 - Все модели в: assets/checkpoints/
 - Информация о каждом скрипте: *_INFO.txt

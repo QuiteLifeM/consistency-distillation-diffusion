@@ -1,12 +1,3 @@
-#!/usr/bin/env python3
-"""
-🎨 ТЕСТ ГЕНЕРАЦИИ Consistency Distillation
-=========================================
-Тестируем обученную модель student_final_5epochs_consistency.pt
-- Генерация в 1-4 шага
-- Качественные изображения
-- Быстрая генерация
-"""
 
 import torch
 import torch.nn as nn
@@ -18,14 +9,11 @@ import time
 import matplotlib.pyplot as plt
 from PIL import Image
 
-# Добавляем путь к micro_diffusion
 sys.path.append('/home/ubuntu/train/train/micro_diffusion')
 
 def load_trained_model(device="cuda"):
-    """Загружаем обученную модель"""
-    print("🔄 Загружаем обученную модель...")
+    print("")
     
-    # Student модель
     from micro_diffusion.models.dit import DiT
     student_model = DiT(
         input_size=64,
@@ -52,26 +40,23 @@ def load_trained_model(device="cuda"):
         experts_every_n=2
     )
     
-    # Загружаем веса
     model_path = "student_final_5epochs_consistency.pt"
     if os.path.exists(model_path):
         checkpoint = torch.load(model_path, map_location=device)
         student_model.load_state_dict(checkpoint)
         student_model.to(device)
         student_model.eval()
-        print(f"✅ Модель загружена: {model_path}")
+        print(f" Модель загружена: {model_path}")
     else:
-        print(f"❌ Модель не найдена: {model_path}")
+        print(f" Модель не найдена: {model_path}")
         return None
     
     return student_model
 
 def load_vae_and_text_encoder(device="cuda"):
-    """Загружаем VAE и Text Encoder"""
     vae = None
     text_encoder = None
     
-    # VAE
     vae_path = "/home/ubuntu/train/train/vae_model.pt"
     if os.path.exists(vae_path):
         vae_checkpoint = torch.load(vae_path, map_location=device)
@@ -80,11 +65,10 @@ def load_vae_and_text_encoder(device="cuda"):
         vae.load_state_dict(vae_checkpoint['model_state_dict'])
         vae.to(device)
         vae.eval()
-        print("✅ VAE загружен")
+        print(" VAE загружен")
     else:
-        print("❌ VAE не найден!")
+        print(" VAE не найден!")
     
-    # Text Encoder
     text_encoder_path = "/home/ubuntu/train/train/text_encoder.pt"
     if os.path.exists(text_encoder_path):
         text_encoder_checkpoint = torch.load(text_encoder_path, map_location=device)
@@ -93,20 +77,16 @@ def load_vae_and_text_encoder(device="cuda"):
         text_encoder.load_state_dict(text_encoder_checkpoint['model_state_dict'])
         text_encoder.to(device)
         text_encoder.eval()
-        print("✅ Text Encoder загружен")
+        print(" Text Encoder загружен")
     else:
-        print("❌ Text Encoder не найден!")
+        print(" Text Encoder не найден!")
     
     return vae, text_encoder
 
 def generate_with_consistency_distillation(student_model, text_prompt, vae=None, text_encoder=None, device="cuda", num_steps=1):
-    """
-    Генерация с Consistency Distillation
-    """
-    print(f"🎨 Генерируем изображение: '{text_prompt}'")
-    print(f"🔄 Шагов: {num_steps}")
+    print(f" Генерируем изображение: '{text_prompt}'")
+    print(f" Шагов: {num_steps}")
     
-    # Получаем текстовые эмбеддинги
     if text_encoder is not None:
         with torch.no_grad():
             tokenized = text_encoder.tokenizer.tokenize([text_prompt])
@@ -115,59 +95,47 @@ def generate_with_consistency_distillation(student_model, text_prompt, vae=None,
             if text_embeddings.dim() == 4:
                 text_embeddings = text_embeddings.squeeze(1)
     else:
-        # Заглушка для тестирования
         text_embeddings = torch.randn(1, 77, 1024, device=device)
-        print("⚠️  Используем случайные text embeddings")
+        print("  Используем случайные text embeddings")
     
-    # Начинаем с чистого шума
     latents = torch.randn(1, 4, 64, 64, device=device)
     
-    print(f"📊 Начальные латенты: {latents.shape}")
-    print(f"📊 Text embeddings: {text_embeddings.shape}")
+    print(f" Начальные латенты: {latents.shape}")
+    print(f" Text embeddings: {text_embeddings.shape}")
     
-    # Consistency Distillation генерация
     with torch.no_grad():
         if num_steps == 1:
-            # Один шаг - прямое предсказание
-            t = torch.ones(1, device=device)  # Максимальный timestep
+            t = torch.ones(1, device=device)
             student_output = student_model(latents, t, text_embeddings)
             generated_latents = student_output['sample'] if isinstance(student_output, dict) else student_output
-            print("🚀 Один шаг генерации!")
+            print(" Один шаг генерации!")
             
         else:
-            # Несколько шагов - итеративное улучшение
             for step in range(num_steps):
-                t = torch.ones(1, device=device) * (1.0 - step / num_steps)  # Уменьшаем t
+                t = torch.ones(1, device=device) * (1.0 - step / num_steps)
                 student_output = student_model(latents, t, text_embeddings)
                 generated_latents = student_output['sample'] if isinstance(student_output, dict) else student_output
                 
-                # Обновляем латенты для следующего шага
                 if step < num_steps - 1:
                     latents = generated_latents
                 
-                print(f"🔄 Шаг {step + 1}/{num_steps}: t={t.item():.3f}")
+                print(f" Шаг {step + 1}/{num_steps}: t={t.item():.3f}")
     
-    print(f"📊 Сгенерированные латенты: {generated_latents.shape}")
+    print(f" Сгенерированные латенты: {generated_latents.shape}")
     
-    # Декодируем в изображение
     if vae is not None:
         with torch.no_grad():
-            # Декодируем латенты в изображение
             generated_image = vae.decode(generated_latents)
-            print(f"📊 Декодированное изображение: {generated_image.shape}")
+            print(f" Декодированное изображение: {generated_image.shape}")
             return generated_image
     else:
-        print("⚠️  VAE не найден, возвращаем латенты")
+        print("  VAE не найден, возвращаем латенты")
         return generated_latents
 
 def generate_ultra_quality(student_model, text_prompt, vae=None, text_encoder=None, device="cuda"):
-    """
-    Генерация максимального качества с 64 шагами
-    """
-    print(f"🎨 ГЕНЕРАЦИЯ МАКСИМАЛЬНОГО КАЧЕСТВА: '{text_prompt}'")
-    print(f"🚀 Шагов: 64 (максимальное качество)")
+    print(f" ГЕНЕРАЦИЯ МАКСИМАЛЬНОГО КАЧЕСТВА: '{text_prompt}'")
+    print(f" Шагов: 64 (максимальное качество)")
     
-    # Получаем текстовые эмбеддинги
     if text_encoder is not None:
         with torch.no_grad():
             tokenized = text_encoder.tokenizer.tokenize([text_prompt])
@@ -177,52 +145,44 @@ def generate_ultra_quality(student_model, text_prompt, vae=None, text_encoder=No
                 text_embeddings = text_embeddings.squeeze(1)
     else:
         text_embeddings = torch.randn(1, 77, 1024, device=device)
-        print("⚠️  Используем случайные text embeddings")
+        print("  Используем случайные text embeddings")
     
-    # Начинаем с чистого шума
     latents = torch.randn(1, 4, 64, 64, device=device)
     
-    print(f"📊 Начальные латенты: {latents.shape}")
+    print(f" Начальные латенты: {latents.shape}")
     
-    # Итеративное улучшение с 64 шагами
     with torch.no_grad():
         for step in range(64):
-            # Плавно уменьшаем timestep от 1.0 до 0.0
             t = torch.ones(1, device=device) * (1.0 - step / 63.0)
             
             student_output = student_model(latents, t, text_embeddings)
             generated_latents = student_output['sample'] if isinstance(student_output, dict) else student_output
             
-            # Обновляем латенты для следующего шага
             latents = generated_latents
             
-            if step % 8 == 0:  # Логируем каждые 8 шагов
-                print(f"🔄 Шаг {step + 1}/64: t={t.item():.3f}")
+            if step % 8 == 0:
+                print(f" Шаг {step + 1}/64: t={t.item():.3f}")
     
-    print(f"📊 Финальные латенты: {generated_latents.shape}")
+    print(f" Финальные латенты: {generated_latents.shape}")
     
-    # Декодируем в изображение
     if vae is not None:
         with torch.no_grad():
             generated_image = vae.decode(generated_latents)
-            print(f"📊 Декодированное изображение: {generated_image.shape}")
+            print(f" Декодированное изображение: {generated_image.shape}")
             return generated_image
     else:
         return generated_latents
 
 def test_consistency_generation():
-    """Тестируем генерацию"""
     device = "cuda" if torch.cuda.is_available() else "cpu"
-    print(f"🖥️ Устройство: {device}")
+    print(f" Устройство: {device}")
     
-    # Загружаем модели
     student_model = load_trained_model(device)
     if student_model is None:
         return
     
     vae, text_encoder = load_vae_and_text_encoder(device)
     
-    # Тестовые промпты
     test_prompts = [
         "A beautiful sunset over mountains",
         "A cute cat playing with yarn", 
@@ -231,56 +191,49 @@ def test_consistency_generation():
         "A cozy cabin in a snowy forest"
     ]
     
-    print(f"\n🎨 ТЕСТИРУЕМ ГЕНЕРАЦИЮ")
+    print(f"\n ТЕСТИРУЕМ ГЕНЕРАЦИЮ")
     print("=" * 50)
     
-    # Создаем папку для результатов
     output_dir = "consistency_generation_outputs"
     os.makedirs(output_dir, exist_ok=True)
     
-    # Тестируем разное количество шагов
     num_steps_list = [1, 2, 4, 8, 16, 32]
     
     for num_steps in num_steps_list:
-        print(f"\n🚀 ТЕСТ: {num_steps} шаг(ов) генерации")
+        print(f"\n ТЕСТ: {num_steps} шаг(ов) генерации")
         print("-" * 30)
         
         for i, prompt in enumerate(test_prompts):
-            print(f"\n📝 Промпт {i+1}: {prompt}")
+            print(f"\n Промпт {i+1}: {prompt}")
             
             try:
-                # Генерируем изображение
                 start_time = time.time()
                 generated = generate_with_consistency_distillation(
                     student_model, prompt, vae, text_encoder, device, num_steps
                 )
                 generation_time = time.time() - start_time
                 
-                print(f"⏱️ Время генерации: {generation_time:.2f} секунд")
+                print(f" Время генерации: {generation_time:.2f} секунд")
                 
-                # Сохраняем результат
                 if isinstance(generated, torch.Tensor) and generated.dim() == 4:
-                    # Это изображение
                     image_tensor = generated[0].cpu()
                     image_array = (image_tensor.permute(1, 2, 0).numpy() * 255).astype(np.uint8)
                     image = Image.fromarray(image_array)
                     
                     filename = f"{output_dir}/test_{i+1}_{num_steps}steps.png"
                     image.save(filename)
-                    print(f"💾 Сохранено: {filename}")
+                    print(f" Сохранено: {filename}")
                     
                 else:
-                    # Это латенты
                     filename = f"{output_dir}/test_{i+1}_{num_steps}steps_latents.pt"
                     torch.save(generated, filename)
-                    print(f"💾 Сохранены латенты: {filename}")
+                    print(f" Сохранены латенты: {filename}")
                 
             except Exception as e:
-                print(f"❌ Ошибка при генерации: {e}")
+                print(f" Ошибка при генерации: {e}")
                 continue
     
-    # ТЕСТ МАКСИМАЛЬНОГО КАЧЕСТВА
-    print(f"\n🚀 ТЕСТ МАКСИМАЛЬНОГО КАЧЕСТВА (64 шага)")
+    print(f"\n ТЕСТ МАКСИМАЛЬНОГО КАЧЕСТВА (64 шага)")
     print("=" * 50)
     
     ultra_prompts = [
@@ -290,7 +243,7 @@ def test_consistency_generation():
     ]
     
     for i, prompt in enumerate(ultra_prompts):
-        print(f"\n🎨 УЛЬТРА-КАЧЕСТВО {i+1}: {prompt}")
+        print(f"\n УЛЬТРА-КАЧЕСТВО {i+1}: {prompt}")
         
         try:
             start_time = time.time()
@@ -299,9 +252,8 @@ def test_consistency_generation():
             )
             generation_time = time.time() - start_time
             
-            print(f"⏱️ Время генерации: {generation_time:.2f} секунд")
+            print(f" Время генерации: {generation_time:.2f} секунд")
             
-            # Сохраняем результат
             if isinstance(generated, torch.Tensor) and generated.dim() == 4:
                 image_tensor = generated[0].cpu()
                 image_array = (image_tensor.permute(1, 2, 0).numpy() * 255).astype(np.uint8)
@@ -309,59 +261,57 @@ def test_consistency_generation():
                 
                 filename = f"{output_dir}/ultra_quality_{i+1}_64steps.png"
                 image.save(filename)
-                print(f"💾 УЛЬТРА-КАЧЕСТВО сохранено: {filename}")
+                print(f" УЛЬТРА-КАЧЕСТВО сохранено: {filename}")
                 
             else:
                 filename = f"{output_dir}/ultra_quality_{i+1}_64steps_latents.pt"
                 torch.save(generated, filename)
-                print(f"💾 УЛЬТРА-КАЧЕСТВО латенты: {filename}")
+                print(f" УЛЬТРА-КАЧЕСТВО латенты: {filename}")
                 
         except Exception as e:
-            print(f"❌ Ошибка при ультра-генерации: {e}")
+            print(f" Ошибка при ультра-генерации: {e}")
             continue
     
-    print(f"\n🎉 ТЕСТИРОВАНИЕ ЗАВЕРШЕНО!")
-    print(f"📁 Результаты в папке: {output_dir}/")
+    print(f"\n ТЕСТИРОВАНИЕ ЗАВЕРШЕНО!")
+    print(f" Результаты в папке: {output_dir}/")
     
-    # Анализ результатов
-    print(f"\n📊 АНАЛИЗ РЕЗУЛЬТАТОВ:")
+    print(f"\n АНАЛИЗ РЕЗУЛЬТАТОВ:")
     print("=" * 30)
     
     for num_steps in num_steps_list:
-        print(f"\n🔄 {num_steps} шаг(ов):")
+        print(f"\n {num_steps} шаг(ов):")
         for i in range(len(test_prompts)):
             filename = f"{output_dir}/test_{i+1}_{num_steps}steps.png"
             if os.path.exists(filename):
-                print(f"  ✅ test_{i+1}_{num_steps}steps.png")
+                print(f"   test_{i+1}_{num_steps}steps.png")
             else:
-                print(f"  ❌ test_{i+1}_{num_steps}steps.png (не создан)")
+                print(f"   test_{i+1}_{num_steps}steps.png (не создан)")
     
-    print(f"\n🚀 УЛЬТРА-КАЧЕСТВО (64 шага):")
+    print(f"\n УЛЬТРА-КАЧЕСТВО (64 шага):")
     for i in range(len(ultra_prompts)):
         filename = f"{output_dir}/ultra_quality_{i+1}_64steps.png"
         if os.path.exists(filename):
-            print(f"  ✅ ultra_quality_{i+1}_64steps.png")
+            print(f"   ultra_quality_{i+1}_64steps.png")
         else:
-            print(f"  ❌ ultra_quality_{i+1}_64steps.png (не создан)")
+            print(f"   ultra_quality_{i+1}_64steps.png (не создан)")
 
 def main():
-    """Основная функция"""
-    print("🎨 ТЕСТ ГЕНЕРАЦИИ CONSISTENCY DISTILLATION")
+    print(" ТЕСТ ГЕНЕРАЦИИ CONSISTENCY DISTILLATION")
     print("=" * 60)
-    print("🎯 Модель: student_final_5epochs_consistency.pt")
-    print("🎯 Улучшение loss: 83.91%")
-    print("🎯 Тестируем: 1, 2, 4, 8, 16, 32 шага")
-    print("🚀 УЛЬТРА-КАЧЕСТВО: 64 шага для максимального качества!")
+    print("")
+    print("")
+    print("")
+    print("")
     print("=" * 60)
     
     try:
         test_consistency_generation()
         
-        print(f"\n🎉 ТЕСТИРОВАНИЕ ЗАВЕРШЕНО!")
-        print(f"📁 Проверьте папку: consistency_generation_outputs/")
+        print(f"\n ТЕСТИРОВАНИЕ ЗАВЕРШЕНО!")
+        print(f" Проверьте папку: consistency_generation_outputs/")
         
     except Exception as e:
-        print(f"❌ Ошибка: {e}")
+        print(f" Ошибка: {e}")
         import traceback
         traceback.print_exc()
 
