@@ -40,9 +40,9 @@ def log_memory_usage(iteration, epoch, prefix=""):
         print(f"  GPU Reserved: {memory_info['gpu_reserved']:.1f}GB")
 
 def load_models(device="cuda"):
-    print("🔄 Загружаем модели...")
+    print(" Загружаем модели...")
     
-    print("🧠 Загружаем Teacher с ПРАВИЛЬНОЙ архитектурой...")
+    print(" Загружаем Teacher с ПРАВИЛЬНОЙ архитектурой...")
     
     teacher_model = create_latent_diffusion(
         latent_res=64,  
