@@ -333,7 +333,7 @@ def train_cd_fixed_text_encoder():
             gpu_total = torch.cuda.get_device_properties(0).total_memory / 1024**3
             gpu_free = gpu_total - gpu_reserved
             
-            print(f"🧠 ПАМЯТЬ {stage}:")
+            print(f"  ПАМЯТЬ {stage}:")
             print(f"  Итерация: {iteration}, Эпоха: {epoch}")
             print(f"  GPU Allocated: {gpu_allocated:.2f}GB")
             print(f"  GPU Reserved: {gpu_reserved:.2f}GB") 
@@ -354,7 +354,7 @@ def train_cd_fixed_text_encoder():
     log_detailed_memory(0, 0, "НАЧАЛО ОБУЧЕНИЯ")
     
     for epoch in range(num_epochs):
-        print(f"\n🔄 ЭПОХА {epoch + 1}/{num_epochs}")
+        print(f"\n ЭПОХА {epoch + 1}/{num_epochs}")
         print("=" * 50)
         
         epoch_losses = []
@@ -408,7 +408,7 @@ def train_cd_fixed_text_encoder():
                 })
                 
                 if iteration % 10 == 0:
-                    log_memory_usage(iteration, epoch + 1, "🧠 МОНИТОРИНГ ПАМЯТИ:")
+                    log_memory_usage(iteration, epoch + 1, " МОНИТОРИНГ ПАМЯТИ:")
                     log_detailed_memory(iteration, epoch + 1, "ДЕТАЛЬНЫЙ МОНИТОРИНГ")
                 
                 if iteration % 500 == 0 and iteration > 0:
@@ -500,7 +500,7 @@ def train_cd_fixed_text_encoder():
         student_model.eval()
         with torch.no_grad():
             for i, prompt in enumerate(test_prompts):
-                print(f"\n📝 Генерируем: '{prompt}'")
+                print(f"\n Генерируем: '{prompt}'")
                 
                 tokenized = tokenizer.tokenize(prompt)
                 text_embeddings = text_encoder.encode(tokenized['input_ids'].to(device))[0].to(device, dtype=torch.float32)
